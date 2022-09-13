@@ -31,6 +31,7 @@ However if there are some problems installing a package with npm install, you ca
 Package Name | Version
 ------------ | --------
 @chakra-ui/react| ^2.3.1,
+@chakra-ui/icons| ^2.0.9
 autoprefixer| ^10.4.8,
 postcss| ^8.4.16,
 tailwindcss| ^3.1.8
