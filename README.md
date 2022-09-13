@@ -1,8 +1,21 @@
 #     Virtual Notebook Example
 
-![](https://i.imgur.com/g6XpBm1.gif)
+![](https://i.imgur.com/syerMxC.gif)
 
-To use this app u need to have SQL Server 2018, entity framework 6 and npm installed on your device.
+To use this app you need to have SQL Server 2018, entity framework 6 and npm installed on your device.
+
+To run this app (once every requirement is installed), you need to execute the commands bellow:
+
+### To run the backend (you should run the backend first):
+
+```
+    dotnet run
+```
+### To run the fronted:
+
+```
+    npm run start
+```
 
 ## BACKEND DEPENDENCIES
 
@@ -57,4 +70,4 @@ The command to install them is:
     npm i packageName
 ```
 
-By default npm is going to install the latest version of each package if there is no version specified.
+By default npm is going to install the latest version of each package if there is no version specified
