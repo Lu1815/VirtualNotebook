@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 export const notesApi = createApi({
     reducerPath: 'notesApi',
-    baseQuery: fetchBaseQuery({ baseUrl: 'https://localhost:7158/' }),
+    baseQuery: fetchBaseQuery({ baseUrl: process.env.REACT_APP_BASE_API_URL }),
     endpoints: (builder) => ({
         getNotes: builder.query({
             query: (id) => `Note?topicId=${id}`,

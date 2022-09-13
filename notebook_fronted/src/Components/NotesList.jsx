@@ -23,14 +23,15 @@ import {
     ModalCloseButton,
     ModalBody,
     Textarea,
-    ModalFooter
+    ModalFooter,
+    Stack
 } from '@chakra-ui/react'
 import Loader from './Loader'
 import axios from 'axios'
 
 const initialState = { title: "", body: "", topicId: "" }
 const initialEditState = { noteId: "", title: "", body: "", topicId: "" }
-const url = `https://localhost:7158/Note/one?id=`;
+const url = process.env.REACT_APP_EDIT_NOTE_URL;
 
 const NotesList = () => {
   let date = new Date();
@@ -41,26 +42,29 @@ const NotesList = () => {
   const [ noteData, setNoteData ] = useState(initialEditState.noteId);
 
   const { topicId } = useParams();
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const { isOpen, onOpen, onClose } = useDisclosure() //? HOOK FROM ChakraUI TO MAKE MODAL WORK
   const { data, isLoading, refetch } = useGetNotesQuery(topicId)
-  // const { noteData } = useGetOneNoteQuery(noteId)
 
+  //? FUNCTIONS FROM notesApi USING REDUX TOOLKIT
   const [ createNote ] = useCreateNoteMutation();
   const [ editNote ] = useEditNoteMutation();
   const [ deleteNote ] = useDeleteNoteMutation();
 
   if(isLoading) return <Loader />;
 
-  console.log(noteData)
-  console.log(inputData)
-
+  //? THIS FUNCTION FIRES WHEN CLICKING ON THE EDIT NOTE BUTTON
   const getNoteToUpdate = (id) => {
+    console.log(id);
     axios.get(url + id)
     .then(res => {
-      setNoteData(res.data[0])
+      console.log(res);
+      setNoteData(res.data);
+      console.log(noteData);
     })
   }
 
+  //? SINCE IN THE INSERT WE DONT NEED THE ID THERE ARE TWO FUNCTIONS TO HANDLE INPUTS CHANGES
+  //? THIS ONE HANDLE CHANGES ON INPUTS WHEN CREATING THE NOTE WHERE WE JUST NEED THE BODY BUT NOT THE ID
   const handleChange = async (e) => {
     const value = e.target.value
     setInputData({
@@ -68,7 +72,8 @@ const NotesList = () => {
       [e.target.name]: value
     })
   }
-
+  
+  //? THIS ONE HANDLE CHANGES ON INPUTS WHEN EDITING A NOTE WHERE WE NEED THE BODY AND THE ID
   const editHandleChange = async (e) => {
     const value = e.target.value
     setNoteData({
@@ -143,9 +148,13 @@ const NotesList = () => {
                       </div>
                       <Spacer />
                       <Center p={6}>
+                        <Stack>
                           <Heading fontSize={{sm: 'md', md:'md', lg:'lg', xl:'xl'}} fontWeight={500} fontFamily={'body'}>
                               { note.title }
                           </Heading>
+                          <Text fontsize="sm">{ note.body.length > 10 ? `${note.body.slice(0,10)}...` : note.body }</Text>
+                          <Text fontsize="sm">{ `Date: ${note.startDateTime.slice(0,10)}` }</Text>
+                        </Stack>
                       </Center>
                       <Spacer />
                       <div>
@@ -185,6 +194,8 @@ const NotesList = () => {
         </Button>
       </Link>
 
+      {/* =============================== MODAL ================================== */}
+
       <Modal onClose={onClose} size={'full'} isOpen={isOpen} closeOnEsc={false}>
         <ModalOverlay />
         <ModalContent bg='gray.800' color="white">
@@ -210,8 +221,11 @@ const NotesList = () => {
             </ModalBody>
             <ModalFooter>
                 <Button onClick={() => {
-                    noteData ? editHandler(noteData) : createNewNote()
-                    onClose()}
+                      noteData ? editHandler(noteData) : createNewNote()
+                      onClose()
+                      setNoteData('')
+                      setInputData('')
+                    }
                   } 
                   bg="gray.400" color="black" mr={3}
                 >

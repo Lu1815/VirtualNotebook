@@ -26,7 +26,7 @@ public class NotebookController : ControllerBase
         if(note != null){
             return Ok(note);
         } else {
-            return Ok("A SU MADRE");
+            return Ok("NO EXISTE UNA NOTA CON EL ID ESPECIFICADO!!");
         }
     }
 
@@ -73,7 +73,8 @@ public class NotebookController : ControllerBase
         Guid topicId,
         Boolean orderByTopic,
         Boolean orderByTitle,
-        Boolean orderByDate
+        Boolean orderByDate,
+        string? searchTerm
     )
     {
         noteList = _db.Note.Where(note =>
@@ -94,11 +95,18 @@ public class NotebookController : ControllerBase
 
         if (orderByTitle)
         {
-            return Ok(noteList.OrderBy(x => x.Title));
+            return Ok(noteList.OrderBy(x => x.Topic));
         }
         else if (orderByDate)
         {
             return Ok(noteList.OrderBy(x => x.StartDateTime));
+        }
+        else if (searchTerm != null)
+        {
+            return Ok(noteList.Where(x => 
+                x.Title.Contains(searchTerm) ||
+                x.Body.Contains(searchTerm)
+            ));
         }
 
         return Ok(noteList);

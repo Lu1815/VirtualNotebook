@@ -20,8 +20,9 @@ import Loader from './Loader'
 
 const TopicsList = () => {
     const [inputData, setInputData] = useState({ name: ''})
-    const { data, isLoading, refetch } = useGetTopicsQuery();
     const { isOpen, onOpen, onClose } = useDisclosure()
+
+    const { data, isLoading, refetch } = useGetTopicsQuery();
     const [createTopic] = useCreateTopicMutation();
     const [deleteTopic] = useDeleteTopicMutation();
 
@@ -53,11 +54,11 @@ const TopicsList = () => {
             </Center>
             <InputGroup>
                 <InputLeftElement pointerEvents='none' children={<SearchIcon color='gray.600' />} />
-                <Input type='tel' variant="filled" placeholder='Topic name' focusBorderColor='gray.800'/>
+                <Input type='text' variant="filled" placeholder='Topic name' focusBorderColor='gray.800'/>
             </InputGroup>
 
             <div className='flex justify-center flex-col md:flex-row md:flex-wrap md:w-full'>
-                {data.length === 0 ? (
+                {data?.length === 0 ? (
                     <div style={{display: "flex", justifyContent: "center"}}>
                         <h1>Add a topic!</h1>
                     </div>
