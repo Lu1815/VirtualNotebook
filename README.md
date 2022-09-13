@@ -2,18 +2,18 @@
 
 ![](https://i.imgur.com/syerMxC.gif)
 
-NOTE: This app is optimized to better used in a phone screen.
+**NOTE: This app is optimized to better used in a phone screen.**
 
-To use this app you need to have SQL Server 2018, entity framework 6 and npm installed on your device.
+To use this app you need to have SQL Server 2018 (but can be any version), entity framework 6 and node installed on your device (assuming you're on Windows, in some Linux distros node, npm and npx are individual packages).
 
 To run this app (once every requirement is installed), you need to execute the commands bellow:
 
-### To run the backend (you should run the backend first):
+### To run the backend, enter to the VirtualNotebook/Notebook folder and run (you should run the backend first):
 
 ```
     dotnet run
 ```
-### To run the fronted:
+### To run the fronted, enter to the VirtualNotebook/notebook_frontend folder and run:
 
 ```
     npm run start
@@ -21,13 +21,13 @@ To run this app (once every requirement is installed), you need to execute the c
 
 ## BACKEND DEPENDENCIES
 
-To install entity framework 6, globally on your device, run the command bellow on the windows CMD:
+To install entity framework 6, globally on your device you need to have .NET 6 [(download here)](https://dotnet.microsoft.com/en-us/download/dotnet/6.0), once .NET 6 is installed run the command bellow on the windows CMD:
 
 ```
     dotnet tool install --global dotnet-ef
 ```
 
-To create the database run the command bellow inside the **Noteebook/Notebook** folder:
+To create the database run the command bellow inside the **VirtualNotebook/Notebook** folder:
 
 ```
     dotnet ef database update
@@ -41,7 +41,9 @@ To install npm dependencies in the react frontend folder run:
     npm install
 ```
 
-However if there are some problems installing a package with npm install, you can install them manually. For that here is the dependencies list I used to built this small app:
+**@chakra-ui/icons** is not listed by default in the package.json file, so when you run npm install is not gonna be installed, you'll need to install it manually after running the command above.
+
+However if there are some problems installing another package with npm install, you can install them manually. For that here is the dependencies list I used to built this small app:
 
 Package Name | Version
 ------------ | --------
