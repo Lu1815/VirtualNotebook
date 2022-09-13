@@ -1,8 +1,23 @@
 #     Virtual Notebook Example
 
-![](https://i.imgur.com/g6XpBm1.gif)
+![](https://i.imgur.com/syerMxC.gif)
 
-To use this app u need to have SQL Server 2018, entity framework 6 and npm installed on your device.
+NOTE: This app is optimized to better used in a phone screen.
+
+To use this app you need to have SQL Server 2018, entity framework 6 and npm installed on your device.
+
+To run this app (once every requirement is installed), you need to execute the commands bellow:
+
+### To run the backend (you should run the backend first):
+
+```
+    dotnet run
+```
+### To run the fronted:
+
+```
+    npm run start
+```
 
 ## BACKEND DEPENDENCIES
 
@@ -31,7 +46,7 @@ However if there are some problems installing a package with npm install, you ca
 Package Name | Version
 ------------ | --------
 @chakra-ui/react| ^2.3.1,
-@chakra-ui/icons| N/V
+@chakra-ui/icons| ^2.0.9
 autoprefixer| ^10.4.8,
 postcss| ^8.4.16,
 tailwindcss| ^3.1.8
@@ -57,4 +72,4 @@ The command to install them is:
     npm i packageName
 ```
 
-By default npm is going to install the latest version of each package if there is no version specified.
+By default npm is going to install the latest version of each package if there is no version specified

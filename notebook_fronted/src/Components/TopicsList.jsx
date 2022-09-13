@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link as ReactLink } from 'react-router-dom'
 import { 
     InputGroup, 
     InputLeftElement, 
+    InputRightElement,
     Input, 
     Heading,
     Center,
@@ -13,18 +14,27 @@ import {
     Box,
     Link, FormControl, FormLabel, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Modal
 } from '@chakra-ui/react'
-import { SearchIcon, ChevronRightIcon, SmallCloseIcon } from '@chakra-ui/icons'
+import { SearchIcon, ChevronRightIcon, SmallCloseIcon, CloseIcon } from '@chakra-ui/icons'
 
 import { useGetTopicsQuery, useCreateTopicMutation, useDeleteTopicMutation } from '../services/topicsApi'
 import Loader from './Loader'
 
 const TopicsList = () => {
+    const [data, setData] = useState([]);
+    const [searchTerm, setSearchTerm] = useState('');
     const [inputData, setInputData] = useState({ name: ''})
     const { isOpen, onOpen, onClose } = useDisclosure()
 
-    const { data, isLoading, refetch } = useGetTopicsQuery();
+    const { data: topics, isLoading, refetch } = useGetTopicsQuery();
     const [createTopic] = useCreateTopicMutation();
     const [deleteTopic] = useDeleteTopicMutation();
+
+    useEffect(() => {
+        const filteredData = topics?.filter(note => 
+            note.name.toLowerCase().includes(searchTerm.toLowerCase())
+        )
+        setData(filteredData);
+    }, [topics, searchTerm]);
 
     const handleChange = async (e) => {
         const value = e.target.value
@@ -54,7 +64,18 @@ const TopicsList = () => {
             </Center>
             <InputGroup>
                 <InputLeftElement pointerEvents='none' children={<SearchIcon color='gray.600' />} />
-                <Input type='text' variant="filled" placeholder='Topic name' focusBorderColor='gray.800'/>
+                <Input type='text' variant="filled" placeholder='Topic name' focusBorderColor='gray.800'
+                    onChange={e => setSearchTerm(e.target.value)} value={searchTerm}
+                />
+                <InputRightElement>
+                    {
+                        searchTerm && (
+                            <button type='button' className='' onClick={() => setSearchTerm('')}>
+                                <CloseIcon color="red.500"/>
+                            </button>
+                        )
+                    }
+                </InputRightElement>
             </InputGroup>
 
             <div className='flex justify-center flex-col md:flex-row md:flex-wrap md:w-full'>

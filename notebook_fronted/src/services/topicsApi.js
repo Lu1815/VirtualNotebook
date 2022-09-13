@@ -27,7 +27,8 @@ export const topicsApi = createApi({
                     body: id,
                     headers: {
                         'Content-type': 'application/json'
-                    }
+                    },
+                    responseHandler: (response) => response.text(),
                 }
             }
         }),

@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link as ReactLink, useParams } from 'react-router-dom'
-import { SearchIcon, EditIcon, SmallCloseIcon, ArrowBackIcon } from '@chakra-ui/icons'
+import { SearchIcon, EditIcon, SmallCloseIcon, ArrowBackIcon, CloseIcon } from '@chakra-ui/icons'
 import { useGetNotesQuery, useCreateNoteMutation, useEditNoteMutation, useDeleteNoteMutation } from '../services/notesApi'
 import { 
     InputGroup, 
     InputLeftElement, 
+    InputRightElement,
     Input, 
     Flex,
     Spacer,
@@ -38,28 +39,34 @@ const NotesList = () => {
   const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
   let localDate = date.toLocaleDateString('en-EN', options);
 
+  const [ data, setData ] = useState([]);
   const [ inputData, setInputData ] = useState(initialState);
   const [ noteData, setNoteData ] = useState(initialEditState.noteId);
+  const [ searchTerm, setSearchTerm ] = useState(initialEditState.noteId);
 
   const { topicId } = useParams();
   const { isOpen, onOpen, onClose } = useDisclosure() //? HOOK FROM ChakraUI TO MAKE MODAL WORK
-  const { data, isLoading, refetch } = useGetNotesQuery(topicId)
-
+  const { data: notes, isLoading, refetch } = useGetNotesQuery(topicId)
+  
   //? FUNCTIONS FROM notesApi USING REDUX TOOLKIT
   const [ createNote ] = useCreateNoteMutation();
   const [ editNote ] = useEditNoteMutation();
   const [ deleteNote ] = useDeleteNoteMutation();
-
-  if(isLoading) return <Loader />;
+  
+  useEffect(() => {
+    const filteredData = notes?.filter(note => 
+      note.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      note.body.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      note.startDateTime.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+    setData(filteredData);
+  }, [notes, searchTerm])
 
   //? THIS FUNCTION FIRES WHEN CLICKING ON THE EDIT NOTE BUTTON
   const getNoteToUpdate = (id) => {
-    console.log(id);
     axios.get(url + id)
     .then(res => {
-      console.log(res);
       setNoteData(res.data);
-      console.log(noteData);
     })
   }
 
@@ -99,10 +106,12 @@ const NotesList = () => {
     refetch();
   }
 
+  if(isLoading) return <Loader />;
+
   return (
     <div>
       <Center p={2}>
-          <Heading>{data.length === 0 ? 'Topic' : data[0].topic}</Heading>
+          <Heading>{data?.length === 0 ? 'Topic' : data?.[0]?.topic}</Heading>
       </Center>
 
       <InputGroup>
@@ -110,17 +119,28 @@ const NotesList = () => {
             pointerEvents='none'
             children={<SearchIcon color='gray.600' />}
           />
-          <Input type='tel' variant="filled" placeholder='Note title, date...' focusBorderColor='gray.800'/>
+          <Input type='tel' variant="filled" placeholder='Note title, date...' focusBorderColor='gray.800'
+            onChange={(e) => setSearchTerm(e.target.value)} value={searchTerm}
+          />
+          <InputRightElement>
+            {
+                searchTerm && (
+                    <button type='button' className='' onClick={() => setSearchTerm('')}>
+                        <CloseIcon color="red.500"/>
+                    </button>
+                )
+            }
+          </InputRightElement>
       </InputGroup>
 
       <div className='flex justify-center flex-col md:flex-row md:flex-wrap md:w-full'>
-        {data.length === 0 ? (
+        {data?.length === 0 ? (
             <div style={{display: "flex", justifyContent: "center"}}>
               <h1>Notes will appear here</h1>
             </div>
           ) : 
           (
-            data.map(note => (
+            data?.map(note => (
               <Box
                 w={{ base: '100%', md: '300px' }}
                 bg={'white'}
