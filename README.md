@@ -2,9 +2,21 @@
 
 ![](https://i.imgur.com/syerMxC.gif)
 
-NOTE: This app is optimized to better used in a phone screen.
+**_NOTE:_** This app is optimized to better used in a phone screen.
+
+**_NOTE:_** To run this app for the first time you need to run the command below to create the database used in the app.
+
+```
+    dotner ef database update
+```
 
 To use this app you need to have SQL Server 2018, entity framework 6 and npm installed on your device.
+
+**_NOTE:_** This app use .NET 6, so, if you have a different version of .NET in use (for example .NET 7) you'll need to run the command below and once the file global.json is created, you'll need to type the version of .NET used in the app. For example when creating this README I had dotnet 7.0.100 and 6.0.403 in my device, to run this project when updating my dotnet version I needed to create a global.json and write the 6.0.403 version of dotnet in my global.json file.
+
+```
+    dotnet new globaljson
+```
 
 To run this app (once every requirement is installed), you need to execute the commands bellow:
 
